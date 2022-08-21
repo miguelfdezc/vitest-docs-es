@@ -18,5 +18,6 @@ bench/test/*/*/
 cypress/videos
 cypress/downloads
 cypress/screenshots
-docs/public/user-avatars
-docs/public/sponsors
+public/user-avatars
+public/sponsors
+.vscode
