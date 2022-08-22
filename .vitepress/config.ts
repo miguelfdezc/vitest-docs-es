@@ -48,7 +48,7 @@ export default defineConfig({
 
     editLink: {
       pattern: 'https://github.com/vitest-dev/vitest/tree/main/docs/:path',
-      text: 'Suggest changes to this page',
+      text: 'Sugerir cambios en esta página',
     },
 
     algolia: {
@@ -61,8 +61,9 @@ export default defineConfig({
     },
 
     localeLinks: {
-      text: 'English',
+      text: 'Español',
       items: [
+        { text: 'English', link: 'https://vitest.dev' },
         { text: '简体中文', link: 'https://cn.vitest.dev' },
       ],
     },
@@ -74,23 +75,23 @@ export default defineConfig({
     ],
 
     footer: {
-      message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2021-PRESENT Anthony Fu, Matías Capeletto and Vitest contributors',
+      message: 'Publicado bajo la licencia MIT.',
+      copyright: 'Copyright © 2021-PRESENTE Anthony Fu, Matías Capeletto y contribuidores de Vitest',
     },
 
     nav: [
-      { text: 'Guide', link: '/guide/' },
+      { text: 'Guía', link: '/guide/' },
       { text: 'API', link: '/api/' },
-      { text: 'Config', link: '/config/' },
+      { text: 'Configuración', link: '/config/' },
       {
         text: `v${version}`,
         items: [
           {
-            text: 'Release Notes ',
+            text: 'Notas de publicación ',
             link: releases,
           },
           {
-            text: 'Contributing ',
+            text: 'Contribuir ',
             link: contributing,
           },
         ],
@@ -101,18 +102,18 @@ export default defineConfig({
       // TODO: bring sidebar of apis and config back
       '/': [
         {
-          text: 'Guide',
+          text: 'Guía',
           items: [
             {
-              text: 'Why Vitest',
+              text: '¿Por qué Vitest?',
               link: '/guide/why',
             },
             {
-              text: 'Getting Started',
+              text: 'Introducción',
               link: '/guide/',
             },
             {
-              text: 'Features',
+              text: 'Características',
               link: '/guide/features',
             },
             {
@@ -120,51 +121,51 @@ export default defineConfig({
               link: '/guide/cli',
             },
             {
-              text: 'Test Filtering',
+              text: 'Filtrado de Tests',
               link: '/guide/filtering',
             },
             {
-              text: 'Coverage',
+              text: 'Cobertura',
               link: '/guide/coverage',
             },
             {
-              text: 'Snapshot',
+              text: 'Instantáneas',
               link: '/guide/snapshot',
             },
             {
-              text: 'Mocking',
+              text: 'Mocks',
               link: '/guide/mocking',
             },
             {
-              text: 'Vitest UI',
+              text: 'Interfaz de Usuario',
               link: '/guide/ui',
             },
             {
-              text: 'In-source Testing',
+              text: 'Pruebas en el Origen',
               link: '/guide/in-source',
             },
             {
-              text: 'Test Context',
+              text: 'Contexto del Test',
               link: '/guide/test-context',
             },
             {
-              text: 'Extending Matchers',
+              text: 'Ampliación de Comparadores',
               link: '/guide/extending-matchers',
             },
             {
-              text: 'IDE Integration',
+              text: 'Integración con IDE',
               link: '/guide/ide',
             },
             {
-              text: 'Debugging',
+              text: 'Depuración',
               link: '/guide/debugging',
             },
             {
-              text: 'Comparisons',
+              text: 'Comparaciones',
               link: '/guide/comparisons',
             },
             {
-              text: 'Migration Guide',
+              text: 'Guía de Migración',
               link: '/guide/migration',
             },
           ],
@@ -173,16 +174,16 @@ export default defineConfig({
           text: 'API',
           items: [
             {
-              text: 'API Reference',
+              text: 'Referencia de la API',
               link: '/api/',
             },
           ],
         },
         {
-          text: 'Config',
+          text: 'Configuración',
           items: [
             {
-              text: 'Config Reference',
+              text: 'Referencia de la Configuración',
               link: '/config/',
             },
           ],
