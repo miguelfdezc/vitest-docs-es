@@ -23,7 +23,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^18.7.3",
     "@unocss/reset": "^0.45.7",
-    "@vitejs/plugin-vue": "latest",
+    "@vitejs/plugin-vue": "2.3.3",
     "esno": "^0.16.3",
     "fast-glob": "^3.2.11",
     "fs-extra": "^10.1.0",
@@ -33,7 +33,7 @@
     "pnpm": "7.9.0",
     "unocss": "^0.45.7",
     "unplugin-vue-components": "^0.22.4",
-    "vite": "^3.0.7",
+    "vite": "2.9.14",
     "vite-plugin-pwa": "0.12.3",
     "vitepress": "^1.0.0-alpha.4",
     "workbox-window": "^6.5.4"
