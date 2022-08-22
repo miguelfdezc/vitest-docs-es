@@ -6,7 +6,7 @@
 Vitest
 </h1>
 <p align="center">
-Un framework de pruebas unitarias muy rápido impulsado por Vite.
+Un framework de pruebas unitarias extremadamente rápido impulsado por Vite.
 </p>
 
 <p align="center">
