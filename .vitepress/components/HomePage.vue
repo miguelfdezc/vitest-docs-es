@@ -9,26 +9,26 @@ import { teamMembers } from '../contributors'
       <main class="main">
         <div class="vp-doc" flex flex-col items-center mt-10>
           <h2 id="meet-the-team" op50 font-normal p="t-10 b-2">
-            Meet The Team
+            Conoce al equipo
           </h2>
           <div w-full p-10>
             <VPTeamMembers size="small" :members="teamMembers" />
           </div>
           <h2 id="the-team" op50 font-normal pt-5 pb-2>
-            Contributors
+            Contribuidores
           </h2>
           <p text-lg max-w-200 text-center leading-7>
             <Contributors />
             <br>
-            <a href="https://chat.vitest.dev" rel="noopener noreferrer">Join the community</a> and get involved!
+            ¡<a href="https://chat.vitest.dev" rel="noopener noreferrer">Únete a la comunidad</a> y participa!
           </p>
 
           <h2 id="sponsored-by" op50 font-normal pt-5 pb-2>
-            Sponsored by
+            Patrocinado por
           </h2>
           <div grid="~ cols-1 lg:cols-2" w-full text-center mt-10>
             <div class="flex flex-col">
-              <a text-lg h="32px" href="https://github.com/sponsors/antfu" rel="noopener noreferrer">Anthony's Sponsors</a>
+              <a text-lg h="32px" href="https://github.com/sponsors/antfu" rel="noopener noreferrer">Patrocinadores de Anthony</a>
               <a href="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg" target="_blank" rel="noopener noreferrer">
                 <img
                   crossorigin="anonymous"
@@ -42,7 +42,7 @@ import { teamMembers } from '../contributors'
               </a>
             </div>
             <div class="flex flex-col">
-              <a text-lg h="32px" href="https://github.com/sponsors/patak-dev" rel="noopener noreferrer">Patak's Sponsors</a>
+              <a text-lg h="32px" href="https://github.com/sponsors/patak-dev" rel="noopener noreferrer">Patrocinadores de Patak</a>
               <a href="https://cdn.jsdelivr.net/gh/patak-dev/static/sponsors.svg" target="_blank" rel="noopener noreferrer">
                 <img
                   crossorigin="anonymous"
