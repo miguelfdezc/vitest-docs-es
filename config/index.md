@@ -2,147 +2,147 @@
 outline: deep
 ---
 
-# Configuring Vitest
+# Configurando Vitest
 
-## Configuration
+## Configuración
 
-`vitest` will read your root `vite.config.ts` when it is present to match with the plugins and setup as your Vite app. If you want to have a different configuration for testing or your main app doesn't rely on Vite specifically, you could either:
+`vitest` leerá el archivo `vite.config.ts` ubicado en la raíz del proyecto, cuando esté presente, para coincidir la configuración y los plugins tal como está en la aplicación Vite. En caso de querer una configuración distinta para el entorno de pruebas o en caso de que la aplicación no dependa específicamente de Vite, se puede:
 
-- Create `vitest.config.ts`, which will have the higher priority and will override the configuration from `vite.config.ts`
-- Pass `--config` option to CLI, e.g. `vitest --config ./path/to/vitest.config.ts`
-- Use `process.env.VITEST` or `mode` property on `defineConfig` (will be set to `test` if not overridden) to conditionally apply different configuration in `vite.config.ts`
+- Crear un archivo llamado `vitest.config.ts`, que tendrá la más alta prioridad y pisa el contenido del archivo `vite.config.ts`
+- Pasar el argumento `--config` al CLI, por ejemplo, `vitest --config ./path/to/vitest.config.ts`
+- Utilizar `process.env.VITEST` o la propiedad `mode` en `defineConfig` (será`test` en caso de no cambiarlo) para aplicar condicionalmente distintas configuraciones en `vite.config.ts`
 
-To configure `vitest` itself, add `test` property in your Vite config. You'll also need to add a reference to Vitest types using a [triple slash command](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html#-reference-types-) at the top of your config file, if you are importing `defineConfig` from `vite` itself.
+Para configurar `vitest` en si mismo, agregar la propiedad `test` en la configuración de Vite. También se necesita agregar una referencia a los tipos de Vitest utilizando [el comando de triple barra](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html#-reference-types-) al principio del archivo, en caso de estar importando `defineConfig` desde `vite`.
 
-using `defineConfig` from `vite` you should follow this:
+Utilizando `defineConfig` desde `vite` se debería hacer de esta manera:
 
 ```ts
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite";
 
 export default defineConfig({
   test: {
     // ...
   },
-})
+});
 ```
 
-using `defineConfig` from `vitest/config` you should follow this:
+Utilizando `defineConfig` desde `vitest/config` se debería hacer de esta manera:
 
 ```ts
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
     // ...
   },
-})
+});
 ```
 
-You can retrieve Vitest's default options to expand them if needed:
+Se puede importar la configuración predeterminada de Vitest y modificarla:
 
 ```ts
-import { configDefaults, defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    exclude: [...configDefaults.exclude, 'packages/template/*'],
+    exclude: [...configDefaults.exclude, "packages/template/*"],
   },
-})
+});
 ```
 
 ## Options
 
-:::tip
-In addition to the following options, you can also use any configuration option from [Vite](https://vitejs.dev/config/). For example, `define` to define global variables, or `resolve.alias` to define aliases.
+:::Tip
+Además de las siguientes opciones, se pueden utilizar las opciones de [Vite](https://vitejs.dev/config/). Por ejemplo, `define` para definir variables globales, o `resolve.alias` para definir diferentes alias.
 :::
 
 ### include
 
-- **Type:** `string[]`
-- **Default:** `['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}']`
+- **Tipo:** `string[]`
+- **Predeterminado:** `['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}']`
 
-Files to include in the test run, using glob pattern.
+Archivos a incluir en las pruebas, utilizando un patrón global.
 
 ### exclude
 
-- **Type:** `string[]`
-- **Default:** `['**/node_modules/**', '**/dist/**', '**/cypress/**', '**/.{idea,git,cache,output,temp}/**']`
+- **Tipo:** `string[]`
+- **Predeterminado:** `['**/node_modules/**', '**/dist/**', '**/cypress/**', '**/.{idea,git,cache,output,temp}/**']`
 
-Files to exclude from the test run, using glob pattern.
+Archivos a excluir de las pruebas, utilizando un patrón global.
 
 ### deps
 
-- **Type:** `{ external?, inline? }`
+- **Tipo:** `{ external?, inline? }`
 
-Handling for dependencies inlining or externalizing
+Manejo de dependencias vía externalización o mediante Vite (inline).
 
 #### deps.external
 
-- **Type:** `(string | RegExp)[]`
-- **Default:** `['**/node_modules/**', '**/dist/**']`
+- **Tipo:** `(string | RegExp)[]`
+- **Predeterminado:** `['**/node_modules/**', '**/dist/**']`
 
-Externalize means that Vite will bypass the package to native Node. Externalized dependencies will not be applied Vite's transformers and resolvers, so they do not support HMR on reload. Typically, packages under `node_modules` are externalized.
+Externalizar significa que Vite derivará la dependencia a Node nativo. A las dependencias externalizadas no se les aplica ninguna transformación ni resolución de Vite, por lo que no soportan HMR cuando se recarga. Usualmente, los paquetes ubicados en `node_modules` están externalizados.
 
 #### deps.inline
 
-- **Type:** `(string | RegExp)[] | true`
-- **Default:** `[]`
+- **Tipo:** `(string | RegExp)[] | true`
+- **Predeterminado:** `[]`
 
-Vite will process inlined modules. This could be helpful to handle packages that ship `.js` in ESM format (that Node can't handle).
+Vite procesará los módules. Esto puede ser útil para manipular paquetes que contienen `.js` en formato ESM (que Node no puede manejar).
 
-If `true`, every dependency will be inlined. All dependencies, specified in [`ssr.noExternal`](https://vitejs.dev/guide/ssr.html#ssr-externals) will be inlined by default.
+En caso de ser `true`, toda dependencia será manipulada por Vite. Todas las dependencias, espcificadas en [`ssr.noExternal`](https://vitejs.dev/guide/ssr.html#ssr-externals) serán manejadas por Vite.
 
 #### deps.fallbackCJS
 
 - **Type** `boolean`
-- **Default:** `false`
+- **Predeterminado:** `false`
 
-When a dependency is a valid ESM package, try to guess the cjs version based on the path. This might be helpful, if a dependency has the wrong ESM file.
+Cuando una dependencia es un paquete ESM válido, intenta adivinar la versión CJS basada en la dirección. Esto puede ser útil si una dependencia tiene un archivo ESM incorrecto.
 
-This might potentially cause some misalignment if a package has different logic in ESM and CJS mode.
+Esto puede potencialmente causar un desajuste si un paquete tiene una lógicas distintas entre ESM y CJS.
 
 #### deps.registerNodeLoader
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **Tipo:** `boolean`
+- **Predeterminado:** `false`
 
-Use [experimental Node loader](https://nodejs.org/api/esm.html#loaders) to resolve imports inside `node_modules`, using Vite resolve algorithm.
+Utilizar el [cargador experimental de Node](https://nodejs.org/api/esm.html#loaders) para resolver los módulos importados dentro de `node_modules`, utilizando el algoritmo de resolución de Vite.
 
-If disabled, your `alias` and `<plugin>.resolveId` won't affect imports inside `node_modules` or `deps.external`.
+En caso de estar deshabilitado, el `alias` y `<plugin>.resolveId` no afectarán los módulos importados en `node_modules` o `deps.external`.
 
 #### deps.interopDefault
 
-- **Type:** `boolean`
-- **Default:** `true`
+- **Tipo:** `boolean`
+- **Predeterminado:** `true`
 
-Interpret CJS module's default as named exports.
+Interpretar los módulos CJS exportados de manera predeterminada (default) como exportaciones con nombre (named exports).
 
 ### alias
 
-- **Type:** `Record<string, string> | Array<{ find: string | RegExp, replacement: string, customResolver?: ResolverFunction | ResolverObject }>`
+- **Tipo:** `Record<string, string> | Array<{ find: string | RegExp, replacement: string, customResolver?: ResolverFunction | ResolverObject }>`
 
-Define custom aliases when running inside tests. They will be merged with aliases from `resolve.alias`.
+Define alias personalizados cuando se corren las pruebas. Serán unificados con los alias agregados en `resolve.alias`.
 
 ### globals
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **Tipo:** `boolean`
+- **Predeterminado:** `false`
 
-By default, `vitest` does not provide global APIs for explicitness. If you prefer to use the APIs globally like Jest, you can pass the `--globals` option to CLI or add `globals: true` in the config.
+`vitest` no provee APIs globales de manera predeterminada. En caso de querer utilizar las APIs de manera global como en Jest, se le puede pasar el argumento `--globals` al CLI o agregar `globals: true` en la configuración.
 
 ```ts
 // vite.config.ts
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
     globals: true,
   },
-})
+});
 ```
 
-To get TypeScript working with the global APIs, add `vitest/globals` to the `types` field in your `tsconfig.json`
+Para lograr que Typescript funciona correctamente con las APIs globales, hay que agregar `vitest/globals` a las lista de `types` en el archivo `tsconfig.json`.
 
 ```json
 // tsconfig.json
@@ -153,349 +153,343 @@ To get TypeScript working with the global APIs, add `vitest/globals` to the `typ
 }
 ```
 
-If you are already using [`unplugin-auto-import`](https://github.com/antfu/unplugin-vue-components) in your project, you can also use it directly for auto importing those APIs.
+En caso de ya estar utilizando la librería [`unplugin-auto-import`](https://github.com/antfu/unplugin-vue-components) en el proyecto, se la puede utilizar para importar automáticamente esas APIs.
 
 ```ts
 // vite.config.ts
-import { defineConfig } from 'vitest/config'
-import AutoImport from 'unplugin-auto-import/vite'
+import { defineConfig } from "vitest/config";
+import AutoImport from "unplugin-auto-import/vite";
 
 export default defineConfig({
   plugins: [
     AutoImport({
-      imports: ['vitest'],
-      dts: true, // generate TypeScript declaration
+      imports: ["vitest"],
+      dts: true, // generar las declaraciones de Typescript
     }),
   ],
-})
+});
 ```
 
 ### environment
 
-- **Type:** `'node' | 'jsdom' | 'happy-dom' | 'edge-runtime'`
-- **Default:** `'node'`
+- **Tipo:** `'node' | 'jsdom' | 'happy-dom' | 'edge-runtime'`
+- **Predeterminado:** `'node'`
 
-The environment that will be used for testing. The default environment in Vitest
-is a Node.js environment. If you are building a web application, you can use
-browser-like environment through either [`jsdom`](https://github.com/jsdom/jsdom)
-or [`happy-dom`](https://github.com/capricorn86/happy-dom) instead.
-If you are building edge functions, you can use [`edge-runtime`](https://edge-runtime.vercel.app/packages/vm) environment
+El entorno que será utilizado para las pruebas. El entorno prdeterminado en Vitest es Node.js. En caso de estar creando una aplicación web, se puede utilizar un entorno de ese tipo mediante la utilización de [`jsdom`](https://github.com/jsdom/jsdom) o [`happy-dom`](https://github.com/capricorn86/happy-dom). En caso de estar creando funciones edge, se puede utilizar el entorno [`edge-runtime`](https://edge-runtime.vercel.app/packages/vm).
 
-By adding a `@vitest-environment` docblock or comment at the top of the file,
-you can specify another environment to be used for all tests in that file:
+Agregando un comentario `@vitest-environment` al principio del archivo, o un docblock con el mismo contenido, se puede especificar otro entorno para ser utilizado en todas las pruebas dentro de ese archivo:
 
-Docblock style:
+Estilo docblock:
 
 ```js
 /**
  * @vitest-environment jsdom
  */
 
-test('use jsdom in this test file', () => {
-  const element = document.createElement('div')
-  expect(element).not.toBeNull()
-})
+test("use jsdom in this test file", () => {
+  const element = document.createElement("div");
+  expect(element).not.toBeNull();
+});
 ```
 
-Comment style:
+Estilo con comentarios:
 
 ```js
 // @vitest-environment happy-dom
 
-test('use happy-dom in this test file', () => {
-  const element = document.createElement('div')
-  expect(element).not.toBeNull()
-})
+test("use happy-dom in this test file", () => {
+  const element = document.createElement("div");
+  expect(element).not.toBeNull();
+});
 ```
 
-For compatibility with Jest, there is also a `@jest-environment`:
+Para compatibilidad con Jest, existe tambien `@jest-environment`:
 
 ```js
 /**
  * @jest-environment jsdom
  */
 
-test('use jsdom in this test file', () => {
-  const element = document.createElement('div')
-  expect(element).not.toBeNull()
-})
+test("use jsdom in this test file", () => {
+  const element = document.createElement("div");
+  expect(element).not.toBeNull();
+});
 ```
 
-If you are running Vitest with [`--no-threads`](#threads) flag, your tests will be run in this order: `node`, `jsdom`, `happy-dom`. Meaning, that every test with the same environment is grouped together, but is still run sequentially.
+En caso de estar corriendo Vitest con el argumento [`--no-threads`](#threads), las pruebas correrán en este orden: `node`, `jsdom`, `happy-dom`. Esto significa que, cada prueba con el mismo entorno es agrupada, pero es igualmente ejecutada de manera secuencial.
 
 ### update
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **Tipo:** `boolean`
+- **Predeterminado:** `false`
 
-Update snapshot files. This will update all changed snapshots and delete obsolete ones.
+Actualiza las instantáneas (snapshots). Esto actualiza todas las instantáneas que hayan cambiado y elimina las obsoletas.
 
 ### watch
 
-- **Type:** `boolean`
-- **Default:** `true`
+- **Tipo:** `boolean`
+- **Predeterminado:** `true`
 
-Enable watch mode
+Habilita el modo para escuchar los cambios en las pruebas.
 
 ### root
 
-- **Type:** `string`
+- **Tipo:** `string`
 
-Project root
+Raíz del proyecto
 
 ### reporters
 
-- **Type:** `Reporter | Reporter[]`
-- **Default:** `'default'`
+- **Tipo:** `Reporter | Reporter[]`
+- **Predeterminado:** `'default'`
 
-Custom reporters for output. Reporters can be [a Reporter instance](https://github.com/vitest-dev/vitest/blob/main/packages/vitest/src/types/reporter.ts) or a string to select built in reporters:
+Especifica herramientas de reportes personalizadas. Las herramientas de reportes pueden ser una [instancia de Reporter](https://github.com/vitest-dev/vitest/blob/main/packages/vitest/src/types/reporter.ts) o una cadena de caracteres para seleccionar una de las opciones predeterminadas:
 
-  - `'default'` - collapse suites when they pass
-  - `'verbose'` - keep the full task tree visible
-  - `'dot'` -  show each task as a single dot
-  - `'junit'` - JUnit XML reporter
-  - `'json'` -  give a simple JSON summary
-  - path of a custom reporter (e.g. `'./path/to/reporter.ts'`, `'@scope/reporter'`)
+- `'default'` - colapsa las series cuando terminan
+- `'verbose'` - mantiene el árbol completo visible
+- `'dot'` - muestra cada tarea como un punto
+- `'junit'` - herramienta de reporte JUnit XML
+- `'json'` - provee un simple resumen en formato JSON
+- dirección a una herramienta personalizada (por ejemplo. `'./path/to/reporter.ts'`, `'@scope/reporter'`)
 
 ### outputTruncateLength
 
-- **Type:** `number`
-- **Default:** `80`
+- **Tipo:** `number`
+- **Predeterminado:** `80`
 
-Truncate output diff lines up to `80` number of characters. You may wish to tune this,
-depending on you terminal window width.
+Trunca cada linea de salida en un máximo de `80` caracteres. Se puede modificar dependiendo del ancho de la consola.
 
 ### outputDiffLines
 
-- **Type:** `number`
-- **Default:** `15`
+- **Tipo:** `number`
+- **Predeterminado:** `15`
 
-Limit number of output diff lines up to `15`.
+Limita la cantidad de lineas de salida a un máximo de `15`.
 
 ### outputFile
 
-- **Type:** `string | Record<string, string>`
+- **Tipo:** `string | Record<string, string>`
 
-Write test results to a file when the `--reporter=json` or `--reporter=junit` option is also specified.
-By providing an object instead of a string you can define individual outputs when using multiple reporters.
+Escribe los resultados de las pruebas en un archivo cuando el argumento `--reporter=json` o `--reporter=junit` es especificado.
+En caso de pasar un objecto en vez de una cadena de caracteres, se pueden definir salidas individuales cuando se utilizan múltiples herramientas de reportes.
 
-To provide object via CLI command, use the following syntax: `--outputFile.json=./path --outputFile.junit=./other-path`.
+Para pasar un objeto utilizando el CLI, utilizar la siguiente sintaxis: `--outputFile.json=./path --outputFile.junit=./other-path`.
 
 ### threads
 
-- **Type:** `boolean`
-- **Default:** `true`
+- **Tipo:** `boolean`
+- **Predeterminado:** `true`
 
-Enable multi-threading using [tinypool](https://github.com/Aslemammad/tinypool) (a lightweight fork of [Piscina](https://github.com/piscinajs/piscina))
+Habilitar multi-hilo utilizando [tinypool](https://github.com/Aslemammad/tinypool) (una versión liviana de [Piscina](https://github.com/piscinajs/piscina))
 
-:::warning
-This option is different from Jest's `--runInBand`. Vitest uses workers not only for running tests in parallel, but also to provide isolation. By disabling this option, your tests will run sequentially, but in the same global context, so you must provide isolation yourself.
+:::Advertencia
+Esta opción difiere de `--runInBand` en Jest. Vitest utiliza workers no solo para correr pruebas en paralelo, sino también para proveer aislamiento. Cuando se deshabilita esta opción, las pruebas correrán secuencialmente, pero en el mismo contexto global, por lo cual el aislamiento de las pruebas deberá ser provisto por el usuario.
 
-This might cause all sorts of issues, if you are relying on global state (frontend frameworks usually do) or your code relies on environment to be defined separately for each test. But can be a speed boost for your tests (up to 3 times faster), that don't necessarily rely on global state or can easily bypass that.
+Esto puede causar todo tipo de problemas, en casos donde se depende un estado global (los frameworks de front end usualmente lo hacen) o si el código depende de un entorno definido de manera separada en cada prueba. Pero puede mejorar la velocidad de las pruebas (hasta 3 veces más rápido), que no dependan necesariamente de un estado global o que lo puedan omitir fácilmente.
 :::
 
 ### maxThreads
 
-- **Type:** `number`
-- **Default:** _available CPUs_
+- **Tipo:** `number`
+- **Predeterminado:** _available CPUs_
 
-Maximum number of threads. You can also use `VITEST_MAX_THREADS` environment variable.
+Número máximo de hilos. Se puede utilizar también la variable de entorno `VITEST_MAX_THREADS`.
 
 ### minThreads
 
-- **Type:** `number`
-- **Default:** _available CPUs_
+- **Tipo:** `number`
+- **Predeterminado:** _available CPUs_
 
-Minimum number of threads. You can also use `VITEST_MIN_THREADS` environment variable.
+Número mínimo de hilos. Se puede utilizar también la variable de entorno `VITEST_MIN_THREADS`.
 
 ### testTimeout
 
-- **Type:** `number`
-- **Default:** `5000`
+- **Tipo:** `number`
+- **Predeterminado:** `5000`
 
-Default timeout of a test in milliseconds
+Tiempo de espera predeterminado para una prueba en milisegundos.
 
 ### hookTimeout
 
-- **Type:** `number`
-- **Default:** `10000`
+- **Tipo:** `number`
+- **Predeterminado:** `10000`
 
-Default timeout of a hook in milliseconds
+Tiempo de espera predeterminado para un hook en milisegundos.
 
 ### teardownTimeout
 
-- **Type:** `number`
-- **Default:** `1000`
+- **Tipo:** `number`
+- **Predeterminado:** `1000`
 
-Default timeout to wait for close when Vitest shuts down, in milliseconds
+Tiempo de espera predeterminado para cerrar Vitest, en milisegundos.
 
 ### silent
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **Tipo:** `boolean`
+- **Predeterminado:** `false`
 
-Silent console output from tests
+Silenciar la salida por consola de las pruebas.
 
 ### setupFiles
 
-- **Type:** `string | string[]`
+- **Tipo:** `string | string[]`
 
-Path to setup files. They will be run before each test file.
+Dirección de los archivos de preparación. Serán ejecutados antes de correr cada archivo de pruebas.
 
-You can use `process.env.VITEST_POOL_ID` (integer-like string) inside to distinguish between threads (will always be `'1'`, if run with `threads: false`).
+Se puede utilizar `process.env.VITEST_POOL_ID` (cadena de caracteres del tipo integer) dentro para distinguir entre hilos (será siempre `'1'`, si se ejecuta con `threads: false`).
 
-:::tip
-Note, that if you are running [`--no-threads`](#threads), this setup file will be run in the same global scope multiple times. Meaning, that you are accessing the same global object before each test, so make sure you are not doing the same thing more than you need.
+:::Tip
+En caso de utiliza r[`--no-threads`](#threads), este archivo será ejecutado en el mismo scope global múltiples veces. Esto significa que siempre se accederá al mismo objeto global antes de cada prueba, por lo que conveiene no realizar la misma acción mayor cantidad de veces de lo necesario.
 :::
 
-For example, you may rely on a global variable:
+Por ejemplo, en caso de depender de una variable global:
 
 ```ts
-import { config } from '@some-testing-lib'
+import { config } from "@some-testing-lib";
 
 if (!globalThis.defined) {
-  config.plugins = [myCoolPlugin]
-  computeHeavyThing()
-  globalThis.defined = true
+  config.plugins = [myCoolPlugin];
+  computeHeavyThing();
+  globalThis.defined = true;
 }
 
-// hooks are reset before each suite
+// los hooks son reiniciados antes antes de cada serie
 afterEach(() => {
-  cleanup()
-})
+  cleanup();
+});
 
-globalThis.resetBeforeEachTest = true
+globalThis.resetBeforeEachTest = true;
 ```
 
 ### globalSetup
 
-- **Type:** `string | string[]`
+- **Tipo:** `string | string[]`
 
-Path to global setup files, relative to project root
+Dirección a los archivos de preparación, relativos a la raíz del proyecto.
 
-A global setup file can either export named functions `setup` and `teardown` or a `default` function that returns a teardown function ([example](https://github.com/vitest-dev/vitest/blob/main/test/global-setup/vitest.config.ts)).
+Un archivo de preparación global puede contener funciones exportadas llamadas `setup` y `teardown` o una función `default` que devuelva una función de limpieza ([ejemplo](https://github.com/vitest-dev/vitest/blob/main/test/global-setup/vitest.config.ts)).
 
-::: info
-Multiple globalSetup files are possible. setup and teardown are executed sequentially with teardown in reverse order.
+::: Info
+Es posible agregar múltiples archivos. La preparación (setup) y la limpieza (teardown) son ejecutadas de manera secuencial con la limpienza en orden reverso.
 :::
 
-::: warning
-Beware that the global setup is run in a different global scope, so your tests don't have access to variables defined here.
+::: Advertencia
+Hay que tener en cuenta que este archivo es ejecutado en un scope global diferente, por lo que las pruebas no tienen acceso a las variables definidas aquí.
 :::
-
 
 ### watchExclude
 
-- **Type:** `string[]`
-- **Default:** `['**/node_modules/**', '**/dist/**']`
+- **Tipo:** `string[]`
+- **Predeterminado:** `['**/node_modules/**', '**/dist/**']`
 
-Glob pattern of file paths to be ignored from triggering watch rerun.
+Patrón global de archivos a ser ignorados a la hora de recargar automáticamente cuando se escuchan los cambios.
 
 ### forceRerunTriggers
 
 - **Type**: `string[]`
-- **Default:** `['**/package.json/**', '**/vitest.config.*/**', '**/vite.config.*/**']`
+- **Predeterminado:** `['**/package.json/**', '**/vitest.config.*/**', '**/vite.config.*/**']`
 
-Glob pattern of file paths that will trigger the whole suite rerun. When paired with the `--changed` argument will run the whole test suite if the trigger is found in the git diff.
+Patrón global de archivos que dispararán que una serie vuelva a correr. Cuando es utilizado con el argumento `--changed`, ejecutará toda la serie completa si el disparador se encuentra dentro del git diff.
 
-Useful if you are testing calling CLI commands, because Vite cannot construct a module graph:
+Útil cuando se hacen pruebas llamando comandos del CLI, porque Vite no puede construir el árbol de módulos.
 
 ```ts
-test('execute a script', async () => {
-  // Vitest cannot rerun this test, if content of `dist/index.js` changes
-  await execa('node', ['dist/index.js'])
-})
+test("ejecutar un script", async () => {
+  // Vitest no puede volver a ejecutar el archivo, si el contenido de `dist/index.js` cambia
+  await execa("node", ["dist/index.js"]);
+});
 ```
 
-::: tip
-Make sure that your files are not excluded by `watchExclude`.
+::: Tip
+Conviene asegurar que los archivos no estén siendo excluídos mediante `watchExclude`.
 :::
 
 ### isolate
 
-- **Type:** `boolean`
-- **Default:** `true`
+- **Tipo:** `boolean`
+- **Predeterminado:** `true`
 
-Isolate environment for each test file. Does not work if you disable [`--threads`](#threads).
+Aísla el entorno de cada archivo de pruebas. No funciona cuando se deshabilita [`--threads`](#threads).
 
 ### coverage
 
-- **Type:** `CoverageC8Options | CoverageIstanbulOptions`
-- **Default:** `undefined`
+- **Tipo:** `CoverageC8Options | CoverageIstanbulOptions`
+- **Predeterminado:** `undefined`
 
-You can use [`c8`](https://github.com/bcoe/c8) or [`istanbul`](https://istanbul.js.org/) for coverage collection.
+Se puede utilizar [`c8`](https://github.com/bcoe/c8) o [`istanbul`](https://istanbul.js.org/) para la cobertura.
 
 #### provider
 
-- **Type:** `'c8' | 'istanbul'`
-- **Default:** `'c8'`
+- **Tipo:** `'c8' | 'istanbul'`
+- **Predeterminado:** `'c8'`
 
-Use `provider` to select the tool for coverage collection.
+Utilizar `provider` para seleccionar la herramienta de cobertura.
 
 #### CoverageC8Options
 
-Used when `provider: 'c8'` is set. Coverage options are passed to [`c8`](https://github.com/bcoe/c8).
+Utilizado cuando se define `provider: 'c8'`. Las opciones de cobertura son pasadas a [`c8`](https://github.com/bcoe/c8).
 
 #### CoverageIstanbulOptions
 
-Used when `provider: 'istanbul'` is set.
+Utilizado cuando se define `provider: 'istanbul'`
 
 ##### exclude
 
-- **Type:** `string[]`
-- **Default:** `[]`
+- **Tipo:** `string[]`
+- **Predeterminado:** `[]`
 
-List of files excluded from coverage as glob patterns.
+Lista de archivos excluídos de la cobertura en el formato de patrones globales.
 
 ##### skipFull
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **Tipo:** `boolean`
+- **Predeterminado:** `false`
 
-Do not show files with 100% statement, branch, and function coverage.
+No mostrar archivos con 100% de cobertura para declaraciones, ramas y funciones.
 
 ##### perFile
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **Tipo:** `boolean`
+- **Predeterminado:** `false`
 
-Check thresholds per file.
+Verificar los umbrales (thresholds) por archivo.
 
 ##### lines
 
-- **Type:** `number`
+- **Tipo:** `number`
 
-Threshold for lines.
+Umbral para líneas.
 
 ##### functions
 
-- **Type:** `number`
+- **Tipo:** `number`
 
-Threshold for functions.
+Umbral para funciones.
 
 ##### branches
 
-- **Type:** `number`
+- **Tipo:** `number`
 
-Threshold for branches.
+Umbral para ramas.
 
 ##### statements
 
-- **Type:** `number`
+- **Tipo:** `number`
 
-Threshold for statements.
+Umbral para declaraciones.
 
 ##### ignoreClassMethods
 
-- **Type:** `string[]`
-- **Default:** []
+- **Tipo:** `string[]`
+- **Predeterminado:** []
 
-Set to array of class method names to ignore for coverage.
+Lista de nombres de métodos de clases a ignorar en la cobertura.
 
 ##### watermarks
 
-- **Type:**
+- **Tipo:**
 <!-- eslint-skip -->
+
 ```ts
 {
   statements?: [number, number],
@@ -505,8 +499,9 @@ Set to array of class method names to ignore for coverage.
 }
 ```
 
-- **Default:**
+- **Predeterminado:**
 <!-- eslint-skip -->
+
 ```ts
 {
   statements: [50, 80],
@@ -516,90 +511,90 @@ Set to array of class method names to ignore for coverage.
 }
 ```
 
-Watermarks for statements, lines, branches and functions.
+Valores predeterminados de declaraciones, funciones, ramas y líneas.
 
 ### testNamePattern
 
 - **Type** `string | RegExp`
 
-Run tests with full names matching the pattern.
-If you add `OnlyRunThis` to this property, tests not containing the word `OnlyRunThis` in the test name will be skipped.
+Correr las pruebas con nombres completos que concuerden con el patrón.
+En caso de agregar `OnlyRunThis` a esta propiedad, las pruebas que no contengan la palabra `OnlyRunThis` en el nombre de la prueba serán omitidas.
 
 ```js
-import { expect, test } from 'vitest'
+import { expect, test } from "vitest";
 
-// run
-test('OnlyRunThis', () => {
-  expect(true).toBe(true)
-})
+// ejecutado
+test("OnlyRunThis", () => {
+  expect(true).toBe(true);
+});
 
-// skipped
-test('doNotRun', () => {
-  expect(true).toBe(true)
-})
+// omitido
+test("doNotRun", () => {
+  expect(true).toBe(true);
+});
 ```
 
 ### open
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **Tipo:** `boolean`
+- **Predeterminado:** `false`
 
-Open Vitest UI (WIP)
+Abre la UI de Vitest (WIP)
 
 ### api
 
-- **Type:** `boolean | number`
-- **Default:** `false`
+- **Tipo:** `boolean | number`
+- **Predeterminado:** `false`
 
-Listen to port and serve API. When set to true, the default port is 51204
+Escucha un puerto y sirve la API. Cuando se define como `true`, el puerto predeterminado es 51204.
 
 ### clearMocks
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **Tipo:** `boolean`
+- **Predeterminado:** `false`
 
-Will call [`.mockClear()`](/api/#mockclear) on all spies before each test. This will clear mock history, but not reset its implementation to the default one.
+Llamará [`.mockClear()`](/api/#mockclear) en todas las funciones espías antes de cada prueba. Esto limpia el historial de la función, pero no reinicia su implementación a la predeterminada.
 
 ### mockReset
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **Tipo:** `boolean`
+- **Predeterminado:** `false`
 
-Will call [`.mockReset()`](/api/#mockreset) on all spies before each test. This will clear mock history and reset its implementation to an empty function (will return `undefined`).
+Llamará [`.mockReset()`](/api/#mockreset) en todas las funciones espías antes de cada prueba. Esto limpia el historial de la función y reinicia su implementación a una función vacía (que retorna `undefined`).
 
 ### restoreMocks
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **Tipo:** `boolean`
+- **Predeterminado:** `false`
 
-Will call [`.mockRestore()`](/api/#mockrestore) on all spies before each test. This will clear mock history and reset its implementation to the original one.
+Llamará [`.mockRestore()`](/api/#mockrestore) en todas las funciones espías antes de cada prueba. Esto limpia el historial de la función y reinicia su implementación a la original.
 
 ### transformMode
 
-- **Type:** `{ web?, ssr? }`
+- **Tipo:** `{ web?, ssr? }`
 
-Determine the transform method of modules
+Determina el método de transformación de los módulos.
 
 #### transformMode.ssr
 
-- **Type:** `RegExp[]`
-- **Default:** `[/\.([cm]?[jt]sx?|json)$/]`
+- **Tipo:** `RegExp[]`
+- **Predeterminado:** `[/\.([cm]?[jt]sx?|json)$/]`
 
-Use SSR transform pipeline for the specified files.<br>
-Vite plugins will receive `ssr: true` flag when processing those files.
+Utiliza la transformación SSR para los archivos especificados.<br>
+Los plugins de Vite recibirán `ssr: true` cuando se procesen esos archivos.
 
 #### transformMode&#46;web
 
-- **Type:** `RegExp[]`
-- **Default:** *modules other than those specified in `transformMode.ssr`*
+- **Tipo:** `RegExp[]`
+- **Predeterminado:** _modules other than those specified in `transformMode.ssr`_
 
-First do a normal transform pipeline (targeting browser), then do a SSR rewrite to run the code in Node.<br>
-Vite plugins will receive `ssr: false` flag when processing those files.
+Primero hace una transformación normal (apuntando al navegador), luego realiza una reescritura SSR para correr el código en Node.<br>
+Los plugins de Vite recibirán `ssr: false` cuando se procesen esos archivos.
 
-When you use JSX as component models other than React (e.g. Vue JSX or SolidJS), you might want to config as following to make `.tsx` / `.jsx` transformed as client-side components:
+Cuando se utiliza JSX con otros frameworks que no sean React (por ejemplo. Vue JSX o SolidJS), quizás se necesite configurar de la siguiente manera para que los archivos `.tsx` / `.jsx` sean transformados como componentes del lado del cliente:
 
 ```ts
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
@@ -607,30 +602,30 @@ export default defineConfig({
       web: [/\.[jt]sx$/],
     },
   },
-})
+});
 ```
 
 ### snapshotFormat
 
-- **Type:** `PrettyFormatOptions`
+- **Tipo:** `PrettyFormatOptions`
 
-Format options for snapshot testing. These options are passed down to [`pretty-format`](https://www.npmjs.com/package/pretty-format).
+Opciones de formato para las instantáneas (snapshots). Estas opciones son pasadas a [`pretty-format`](https://www.npmjs.com/package/pretty-format).
 
 ### resolveSnapshotPath
 
 - **Type**: `(testPath: string, snapExtension: string) => string`
-- **Default**: stores snapshot files in `__snapshots__` directory
+- **Default**: guarda las instantáneas en el directorio `__snapshots__`
 
-Overrides default snapshot path. For example, to store snapshots next to test files:
+Pisa el directorio predeterminado para las instantáneas. Por ejemplo, para guardar las instantáneas junto al archivo de pruebas:
 
 ```ts
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
     resolveSnapshotPath: (testPath, snapExtension) => testPath + snapExtension,
   },
-})
+});
 ```
 
 ### allowOnly
@@ -638,100 +633,100 @@ export default defineConfig({
 - **Type**: `boolean`
 - **Default**: `false`
 
-Allow tests and suites that are marked as only.
+Permite las pruebas y series que estén marcadas como `only`.
 
 ### dangerouslyIgnoreUnhandledErrors
 
 - **Type**: `boolean`
 - **Default**: `false`
 
-Ignore any unhandled errors that occur.
+Ignora los error que no sean atrapados.
 
 ### passWithNoTests
 
 - **Type**: `boolean`
 - **Default**: `false`
 
-Vitest will not fail, if no tests will be found.
+Vitest no fallará cuando no se encuentren pruebas para correr.
 
 ### logHeapUsage
 
 - **Type**: `boolean`
 - **Default**: `false`
 
-Show heap usage after each test. Useful for debugging memory leaks.
+Muestra la utilización de memoria luego de cada prueba. Útil para analizar problemas de memoria.
 
 ### css
 
 - **Type**: `boolean | { include?, exclude? }`
 
-Configure if CSS should be processed. When excluded, CSS files will be replaced with empty strings to bypass the subsequent processing.
+Configurar si el CSS debe ser procesado. Cuando se excluye, los archivos CSS serán reemplazados con cadenas de caracteres vacías para evitar procesarlos.
 
-By default, processes only CSS Modules, because it affects runtime. JSDOM and Happy DOM don't fully support injecting CSS, so disabling this setting might help with performance.
+La opción predeterminada procesa solamente los módulos CSS porque afectan las pruebas en tiempo de ejecución. JSDOM y Happy DOM no soportan inyectar CSS, con lo cual deshabilitar esta opción podría mejorar la performance.
 
 #### css.include
 
 - **Type**: `RegExp | RegExp[]`
 - **Default**: `[/\.module\./]`
 
-RegExp pattern for files that should return actual CSS and will be processed by Vite pipeline.
+Patrón RegExp para archivos que deberían retornar CSS y serán procesados por Vite.
 
 #### css.exclude
 
 - **Type**: `RegExp | RegExp[]`
 - **Default**: `[]`
 
-RegExp pattern for files that will return an empty CSS file.
+Patrón RegExp para archivos que retornen CSS vacío.
 
 ### maxConcurrency
 
 - **Type**: `number`
 - **Default**: `5`
 
-A number of tests that are allowed to run at the same time marked with `test.concurrent`.
+Número de pruebas que se permitirán ejecutar al mismo tiempo cuando sean marcadas con `test.concurrent`.
 
-Test above this limit will be queued to run when available slot appears.
+Las pruebas por encima de este límite serán encoladas para ejecutarse cuando haya un lugar disponible.
 
 ### cache
 
 - **Type**: `false | { dir? }`
 
-Options to configure Vitest cache policy. At the moment Vitest stores cache for test results to run the longer and failed tests first.
+Opciones para configurar la política de cache de Vitest. En este momento Vitest guarda cache para correr primero las pruebas que más tarda y las pruebas fallidas primero.
 
 #### cache.dir
 
 - **Type**: `string`
 - **Default**: `node_modules/.vitest`
 
-Path to cache directory.
+Dirección del directorio de cache.
 
 ### sequence
 
 - **Type**: `{ sequencer?, shuffle?, seed? }`
 
-Options for how tests should be sorted.
+Opciones sobre como las pruebas serán ordenadas.
 
 #### sequence.sequencer
 
 - **Type**: `TestSequencerConstructor`
 - **Default**: `BaseSequencer`
 
-A custom class that defines methods for sharding and sorting. You can extend `BaseSequencer` from `vitest/node`, if you only need to redefine one of the `sort` and `shard` methods, but both should exist.
+Clase personalizada que define métodos de fragmentación y ordenamiento. Se puede extender el `BaseSequencer` desde `vitest/node`, si sólo se necesita redefinir uno de los métodos `sort` y `shard`, pero ambos deben existir.
 
-Sharding is happening before sorting, and only if `--shard` option is provided.
+La fragmentación sucede antes del ordenamiento, y sólo si la opción `--shard` es provista.
 
 #### sequence.shuffle
 
 - **Type**: `boolean`
 - **Default**: `false`
 
-If you want tests to run randomly, you can enable it with this option, or CLI argument [`--sequence.shuffle`](/guide/cli).
+Cuando se quiere correr las pruebas de manera aleatoria, se puede habilitar esa opción, el argumento [`--sequence.shuffle`](/guide/cli) en el CLI.
 
-Vitest usually uses cache to sort tests, so long running tests start earlier - this makes tests run faster. If your tests will run in random order you will lose this performance improvement, but it may be useful to track tests that accidentally depend on another run previously.
+Vitest usualmente utiliza cache para ordenar las pruebas, con lo cual las pruebas más largas comienzan primero - esto hace que las pruebas corran más rápido. Si las pruebas corren en orden aleatorio se pierde la mejora de performance, pero puede ser útil para encontrar pruebas que accidentalmente dependen de otras.
 
 #### sequence.seed
 
 - **Type**: `number`
 - **Default**: `Date.now()`
 
-Sets the randomization seed, if tests are running in random order.
+Define la semilla (seed) para el método aleatorio, siempre y cuando las pruebas se ejecuten de esta manera.
