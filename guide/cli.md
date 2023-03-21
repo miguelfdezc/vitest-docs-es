@@ -110,3 +110,5 @@ vitest related /src/index.ts /src/hello-world.js
 :::warning
 You cannot use this option with `--watch` enabled (enabled in dev by default).
 :::
+
+[cac's dot notation]: https://github.com/cacjs/cac#dot-nested-options
