@@ -925,6 +925,8 @@ When you use `test` in the top level of file, they are collected as part of the 
 
 - **Type:** `(received: any) => Awaitable<void>`
 
+- **Alias:** `toThrow`
+
   `toThrowError` asserts if a function throws an error when it is called.
 
   For example, if we want to test that `getFruitStock('pineapples')` throws, we could write:
@@ -959,6 +961,10 @@ When you use `test` in the top level of file, they are collected as part of the 
     )
   })
   ```
+
+  :::tip
+    To test async functions, use in combination with [rejects](#rejects).
+  :::
 
 ### toMatchSnapshot
 
